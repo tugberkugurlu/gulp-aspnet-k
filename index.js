@@ -22,11 +22,11 @@ var kRunner = function(options) {
     var commands = [];
 
     if(options.restore === true) {
-        commands.push('kpm restore' + options.quiet? ' --quiet' : '');
+        commands.push('kpm restore' + (options.quiet? ' --quiet' : ''));
     }
 
     if(options.build === true) {
-        commands.push('kpm build' + options.quiet? ' --quiet' : '');
+        commands.push('kpm build' + (options.quiet? ' --quiet' : ''));
     }
 
     if(options.run === true) {
@@ -37,8 +37,8 @@ var kRunner = function(options) {
 }
 
 var wrapLoop = function(commands) {
-    return '@powershell -NoProfile -ExecutionPolicy unrestricted -Command "for(;;) { Write-Output \"Starting...\";';
-    + commands.join('; ');
+    return '@powershell -NoProfile -ExecutionPolicy unrestricted -Command "for(;;) { Write-Output \"Starting...\";'
+    + commands.join('; ')
     + ' }"';
 
 }
