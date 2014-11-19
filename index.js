@@ -11,6 +11,7 @@ var kRunner = function(options) {
         build: false,
         run: true,
         loop: true,
+        quiet: true,
         kCommand: 'web'
     }, options);
 
@@ -21,11 +22,11 @@ var kRunner = function(options) {
     var commands = [];
 
     if(options.restore === true) {
-        commands.push('kpm restore');
+        commands.push('kpm restore' + options.quiet? ' --quiet' : '');
     }
 
     if(options.build === true) {
-        commands.push('kpm build');
+        commands.push('kpm build' + options.quiet? ' --quiet' : '');
     }
 
     if(options.run === true) {
