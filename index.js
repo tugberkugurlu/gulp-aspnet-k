@@ -4,12 +4,13 @@ var _ = require('lodash'),
 
 var PLUGIN_NAME = 'aspnet-k';
 
-function kRunner(options) {
+var kRunner = function(options) {
 
     options = _.extend({
         restore: true,
         build: false,
         run: true,
+        loop: true,
         kCommand: 'web'
     }, options);
 
@@ -28,10 +29,17 @@ function kRunner(options) {
     }
 
     if(options.run === true) {
-        commands.push('@powershell -NoProfile -ExecutionPolicy unrestricted -Command "for(;;) { Write-Output \"Starting...\"; k --watch ' + options.kCommand + ' }"');
+        commands.push('k --watch ' + options.kCommand);
     }
 
-    return shell.task(commands, { env: process.env });
+    return shell.task(options.loop? wrapLoop(commands) : commands, { env: process.env });
+}
+
+var wrapLoop = function(commands) {
+    return '@powershell -NoProfile -ExecutionPolicy unrestricted -Command "for(;;) { Write-Output \"Starting...\";';
+    + commands.join('; ');
+    + ' }"';
+
 }
 
 kRunner.build = function() {
