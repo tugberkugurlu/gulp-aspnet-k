@@ -47,7 +47,8 @@ kRunner.build = function() {
     return kRunner({
         build: true,
         restore: false,
-        run: false
+        run: false,
+        loop: false
     });
 }
 
@@ -55,7 +56,8 @@ kRunner.restore = function() {
     return kRunner({
         restore: true,
         build: false,
-        run: false
+        run: false,
+        loop: false
     });
 }
 
@@ -63,7 +65,8 @@ kRunner.restoreBuild = function() {
     return kRunner({
         restore: true,
         build: true,
-        run: false
+        run: false,
+        loop: false
     });
 }
 
