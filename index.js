@@ -39,7 +39,7 @@ function dnxRunner(dnxCommand, options) {
     if (isWin) {
       commands.push(util.format('@powershell -NoProfile -ExecutionPolicy unrestricted -Command "for(;;) { Write-Output \"Starting...\"; dnx --watch . %s }"', dnxCommand));      
     } else {
-      commands.push(util.format('nodemon --ext "cs,json" --exec "dnx . %s"', dnxCommand));
+      commands.push(util.format('nodemon --ext "cs" --exec "dnx . %s"', dnxCommand));
     }
   }
 
