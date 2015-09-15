@@ -1,6 +1,11 @@
 var _ = require('lodash'),
   shell = require('gulp-shell'),
-  gutil = require('gulp-util');
+  gutil = require('gulp-util'),
+  util = require('util');
+
+require('dotbin');
+
+var isWin = /^win/.test(process.platform);
 
 var PLUGIN_NAME = 'dnx';
 
@@ -31,7 +36,11 @@ function dnxRunner(dnxCommand, options) {
   }
 
   if (options.run === true) {
-    commands.push('@powershell -NoProfile -ExecutionPolicy unrestricted -Command "for(;;) { Write-Output \"Starting...\"; dnx --watch ' + dnxCommand + ' }"');
+    if (isWin) {
+      commands.push(util.format('@powershell -NoProfile -ExecutionPolicy unrestricted -Command "for(;;) { Write-Output \"Starting...\"; dnx --watch . %s }"', dnxCommand));      
+    } else {
+      commands.push(util.format('nodemon --ext "cs" --exec "dnx . %s"', dnxCommand));
+    }
   }
 
   return shell.task(commands, {
