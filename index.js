@@ -12,12 +12,17 @@ function dnxRunner(dnxCommand, options) {
   options = _.extend({
     restore: true,
     build: false,
-    run: true,
+    watch: true,
+    run: false,
     cwd: './'
   }, options);
 
   if (!options.restore && !options.build && !options.run) {
     throw new gutil.PluginError(PLUGIN_NAME, 'No action has been specified');
+  }
+
+  if (options.watch && options.run) {
+    throw new gutil.PluginError(PLUGIN_NAME, 'Run and watch cannot both be true');
   }
 
   var commands = [];
@@ -30,8 +35,12 @@ function dnxRunner(dnxCommand, options) {
     commands.push('dnu build');
   }
 
-  if (options.run === true) {
+  if (options.watch === true) {
     commands.push('@powershell -NoProfile -ExecutionPolicy unrestricted -Command "for(;;) { Write-Output \"Starting...\"; dnx --watch ' + dnxCommand + ' }"');
+  }
+
+  if (options.run === true) {
+      commands.push('@powershell -NoProfile -ExecutionPolicy unrestricted -Command "Write-Output \"Starting...\"; dnx ' + dnxCommand + ' "');
   }
 
   return shell.task(commands, {
